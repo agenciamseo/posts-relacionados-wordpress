@@ -1,0 +1,38 @@
+			<?php
+					$related = new WP_Query(
+					array(
+						'post_type'      => 'cases', // post type
+						'category__in'   => wp_get_post_categories( $post->ID ),
+						'posts_per_page' => 3,
+						'post__not_in'   => array( $post->ID ),
+					)
+				);
+
+			if ( $related->have_posts() ) : ?>
+				<?php
+				while ( $related->have_posts() ) :
+					$related->the_post();
+					?>
+
+						<div class="column one-third">
+							<div class="cases_list-item">
+								<div class="cases_image">
+									<?php if ( has_post_thumbnail( $post->ID ) ) { ?>
+										<?php if ( has_post_thumbnail() ) {
+											the_post_thumbnail('full');
+										}  ?>
+								</div>
+								<div class="desc_cases">
+									<h3><?php the_title(); ?></h3>
+									<p><?php echo wp_trim_words( get_the_content(), 25 ); ?> </p>
+									<div class="btn_cases"><a href="<?php the_permalink(); ?>" title="<?php the_title(); ?>">leia mais</a></div>
+								</div>
+							</div>
+						</div>
+
+			<?php } ?>
+			<?php
+				endwhile;
+				wp_reset_postdata();
+			?>
+		<?php endif; ?>
